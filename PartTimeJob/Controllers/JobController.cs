@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using PartTimeJob.DAL;
 using PartTimeJob.Models;
 
@@ -16,17 +17,33 @@ namespace PartTimeJob.Controllers
         private PartTimeContext db = new PartTimeContext();
 
         // GET: Job
-        public ViewResult Index(string sortOrder, string searchString)
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.LocationSortParm = String.IsNullOrEmpty(sortOrder) ? "location_desc" : "";
             ViewBag.TitleSortParm = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewBag.SalarySortParm = String.IsNullOrEmpty(sortOrder) ? "salary_desc" : "";
-            
+
             //ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+            //Display Page Number
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+
             var jobs = from s in db.Jobs
                            select s;
 
+            //Search function
             if (!String.IsNullOrEmpty(searchString))
             {
                 jobs = jobs.Where(s => s.Name.Contains(searchString)
@@ -34,6 +51,7 @@ namespace PartTimeJob.Controllers
                                        || s.Title.Contains(searchString));
             }
 
+            //Sort Function
             switch (sortOrder)
             {
                 case "name_desc":
@@ -55,10 +73,13 @@ namespace PartTimeJob.Controllers
                     jobs = jobs.OrderBy(s => s.Name);
                     break;
             }
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(jobs.ToPagedList(pageNumber, pageSize));
 
             //var job = db.Jobs.Include(j => j.Employer);
             //return View(job.ToList());
-            return View(jobs.ToList());
+            //return View(jobs.ToList());
         }
 
         // GET: Job/Details/5

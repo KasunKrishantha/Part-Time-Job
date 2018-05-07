@@ -1,19 +1,21 @@
-﻿@model IEnumerable<PartTimeJob.Models.Job>
+﻿@model PagedList.IPagedList<PartTimeJob.Models.Job>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Jobs";
 }
 
-<h2>Index</h2>
+<h2>Jobs</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Job", FormMethod.Get))
 {
     <p>
-        Find by name: @Html.TextBox("SearchString")
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
         <input type="submit" value="Search" />
     </p>
 }
@@ -22,58 +24,58 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Employer.FirstName)
+            First Name
         </th>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm })
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Position)
+            Position
         </th>
         <th>
-            @Html.ActionLink("Location", "Index", new { sortOrder = ViewBag.LocationSortParm })
+            @Html.ActionLink("Location", "Index", new { sortOrder = ViewBag.LocationSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Salary", "Index", new { sortOrder = ViewBag.SalarySortParm })
+            @Html.ActionLink("Salary", "Index", new { sortOrder = ViewBag.SalarySortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            Description
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AgeRange)
+            AgeRange
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ContactNumber)
+            ContactNumber
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.GenderType)
+            GenderType
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EmployeementType)
+            EmployeementType
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Qualification)
+            Qualification
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NumberOfEmp)
+            NumberOfEmp
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.District)
+            District
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.JobRole)
+            JobRole
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Education)
+            Education
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Requirement)
+            Requirement
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Status)
+            Status
         </th>
         <th></th>
     </tr>
@@ -144,3 +146,8 @@
     }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
