@@ -9,25 +9,35 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+
+
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Employer.FirstName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Position)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.ActionLink("Location", "Index", new { sortOrder = ViewBag.LocationSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Salary)
+            @Html.ActionLink("Salary", "Index", new { sortOrder = ViewBag.SalarySortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
@@ -68,68 +78,69 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Employer.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Position)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Location)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Salary)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AgeRange)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ContactNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GenderType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EmployeementType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Qualification)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumberOfEmp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.District)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.JobRole)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Education)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Requirement)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employer.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Salary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgeRange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GenderType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeementType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Qualification)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfEmp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobRole)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Education)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Requirement)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
 
 </table>

@@ -47,6 +47,7 @@ namespace PartTimeJob.Models
         public string JobRole { get; set; }
         public string Education { get; set; }
         public string Requirement { get; set; }
+        //public DateTime Date { get; set; }
         public Status? Status { get; set; }
 
         //public virtual ICollection<PostView> PostViews { get; set; }

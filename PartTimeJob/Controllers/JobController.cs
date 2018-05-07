@@ -16,9 +16,48 @@ namespace PartTimeJob.Controllers
         private PartTimeContext db = new PartTimeContext();
 
         // GET: Job
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string searchString)
         {
-            var jobs = db.Jobs.Include(j => j.Employer);
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.LocationSortParm = String.IsNullOrEmpty(sortOrder) ? "location_desc" : "";
+            ViewBag.TitleSortParm = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewBag.SalarySortParm = String.IsNullOrEmpty(sortOrder) ? "salary_desc" : "";
+            
+            //ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            var jobs = from s in db.Jobs
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                jobs = jobs.Where(s => s.Name.Contains(searchString)
+                                       || s.Position.Contains(searchString) 
+                                       || s.Title.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    jobs = jobs.OrderByDescending(s => s.Name);
+                    break;
+                case "location_desc":
+                    jobs = jobs.OrderByDescending(s => s.Location);
+                    break;
+                case "title_desc":
+                    jobs = jobs.OrderByDescending(s => s.Title);
+                    break;
+                //case "Date":
+                  //  jobs = jobs.OrderBy(s => s.Position);
+                    //break;
+                case "salary_desc":
+                    jobs = jobs.OrderByDescending(s => s.Salary);
+                    break;
+                default:
+                    jobs = jobs.OrderBy(s => s.Name);
+                    break;
+            }
+
+            //var job = db.Jobs.Include(j => j.Employer);
+            //return View(job.ToList());
             return View(jobs.ToList());
         }
 
@@ -37,6 +76,8 @@ namespace PartTimeJob.Controllers
             return View(job);
         }
 
+        
+
         // GET: Job/Create
         public ActionResult Create()
         {
@@ -49,16 +90,25 @@ namespace PartTimeJob.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,EmployerID,Name,Title,Position,Location,Salary,Description,AgeRange,ContactNumber,GenderType,EmployeementType,Qualification,NumberOfEmp,District,JobRole,Education,Requirement,Status")] Job job)
+        public ActionResult Create([Bind(Include = "EmployerID,Name,Title,Position,Location,Salary,Description,AgeRange,ContactNumber,GenderType,EmployeementType,Qualification,NumberOfEmp,District,JobRole,Education,Requirement,Status")] Job job)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Jobs.Add(job);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Jobs.Add(job);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (DataException /* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
-            ViewBag.EmployerID = new SelectList(db.Employers, "ID", "FirstName", job.EmployerID);
+
+            //ViewBag.EmployerID = new SelectList(db.Employers, "ID", "FirstName", job.EmployerID);
             return View(job);
         }
 
@@ -81,26 +131,63 @@ namespace PartTimeJob.Controllers
         // POST: Job/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,EmployerID,Name,Title,Position,Location,Salary,Description,AgeRange,ContactNumber,GenderType,EmployeementType,Qualification,NumberOfEmp,District,JobRole,Education,Requirement,Status")] Job job)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(job).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.EmployerID = new SelectList(db.Employers, "ID", "FirstName", job.EmployerID);
-            return View(job);
-        }
 
-        // GET: Job/Delete/5
-        public ActionResult Delete(int? id)
+        [HttpPost,ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPost(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var jobToUpdate = db.Jobs.Find(id);
+
+            if (TryUpdateModel(jobToUpdate, "",
+                new string[] {"EmployerID","Name","Title","Position","Location","Salary","Description","AgeRange","ContactNumber","GenderType","EmployeementType","Qualification","NumberOfEmp","District","JobRole","Education","Requirement","Status" }))
+            {
+                try
+                {
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (DataException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            return View(jobToUpdate);
+
+
+        }
+
+        /*
+               [HttpPost]
+               [ValidateAntiForgeryToken]
+               public ActionResult Edit([Bind(Include = "ID,EmployerID,Name,Title,Position,Location,Salary,Description,AgeRange,ContactNumber,GenderType,EmployeementType,Qualification,NumberOfEmp,District,JobRole,Education,Requirement,Status")] Job job)
+               {
+                   if (ModelState.IsValid)
+                   {
+                       db.Entry(job).State = EntityState.Modified;
+                       db.SaveChanges();
+                       return RedirectToAction("Index");
+                   }
+                   ViewBag.EmployerID = new SelectList(db.Employers, "ID", "FirstName", job.EmployerID);
+                   return View(job);
+               }
+         */
+
+        // GET: Job/Delete/5
+        public ActionResult Delete(int? id ,bool? saveChangesError= false)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
             }
             Job job = db.Jobs.Find(id);
             if (job == null)
@@ -110,6 +197,27 @@ namespace PartTimeJob.Controllers
             return View(job);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                Job jobToDelete = new Job() { ID = id };
+                db.Entry(jobToDelete).State = EntityState.Deleted;
+                //Job job = db.Jobs.Find(id);
+                //db.Jobs.Remove(job);
+                db.SaveChanges();
+            }
+            catch (DataException/* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
+            }
+            return RedirectToAction("Index");
+        }
+
+        /*
         // POST: Job/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -120,6 +228,7 @@ namespace PartTimeJob.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        */
 
         protected override void Dispose(bool disposing)
         {

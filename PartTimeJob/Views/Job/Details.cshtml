@@ -154,6 +154,26 @@
             @Html.DisplayFor(model => model.Status)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model=> model.JobApplies)
+        </dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Employee Name</th> 
+                    <th>Enrollment Date</th>
+                </tr>
+                @foreach (var item in Model.JobApplies)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Employee.FirstName)</td>
+                    <td>@Html.DisplayFor(modelItem=> item.ApplyDate)</td>
+                </tr>
+
+                }
+            </table>
+        </dd>
+
     </dl>
 </div>
 <p>
