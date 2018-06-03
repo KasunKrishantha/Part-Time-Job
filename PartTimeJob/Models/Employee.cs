@@ -27,12 +27,13 @@ namespace PartTimeJob.Models
 
         public Gender? Gender { get; set; }
 
-        public string Payment { get; set; }
         public string Qualification { get; set; }
-        public string YourTrip { get; set; }
 
-        //public virtual User User { get; set; }
+        public virtual ICollection<PostView> PostViews { get; set; }
         public virtual ICollection<JobApply> JobApplies { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
+        public virtual ICollection<YourTrip> YourTrips { get; set; }
+
 
 
     }

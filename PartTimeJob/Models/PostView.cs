@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -12,17 +13,20 @@ namespace PartTimeJob.Models
     public class PostView
     {
         public int ID { get; set; }
-        public Rate? Rate { get; set; }
 
-        //public int EmployeeID { get; set; }
-        public int EmployerID { get; set; }
-        //public int AdminID { get; set; }
+        [ForeignKey("Job")]
         public int JobID { get; set; }
 
-        //public virtual User User { get; set; }
-        //public virtual Employee Employee { get; set; }
-        //public virtual Employer Employer { get; set; }
-        //public virtual Job Job { get; set; }
+        [ForeignKey("Employee")]
+        public int EmployeeID { get; set; }
+
+        public Rate? Rate { get; set; }
+
+        public string Comment { get; set; }
+
+
+        public virtual Employee Employee { get; set; }
+        public virtual Job Job { get; set; }
 
 
     }

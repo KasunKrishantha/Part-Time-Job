@@ -46,7 +46,7 @@ namespace PartTimeJob.Controllers
             //Search function
             if (!String.IsNullOrEmpty(searchString))
             {
-                jobs = jobs.Where(s => s.Name.Contains(searchString)
+                jobs = jobs.Where(s => s.Catagory.Contains(searchString)
                                        || s.Position.Contains(searchString) 
                                        || s.Title.Contains(searchString));
             }
@@ -55,7 +55,7 @@ namespace PartTimeJob.Controllers
             switch (sortOrder)
             {
                 case "name_desc":
-                    jobs = jobs.OrderByDescending(s => s.Name);
+                    jobs = jobs.OrderByDescending(s => s.Catagory);
                     break;
                 case "location_desc":
                     jobs = jobs.OrderByDescending(s => s.Location);
@@ -70,7 +70,7 @@ namespace PartTimeJob.Controllers
                     jobs = jobs.OrderByDescending(s => s.Salary);
                     break;
                 default:
-                    jobs = jobs.OrderBy(s => s.Name);
+                    jobs = jobs.OrderBy(s => s.Catagory);
                     break;
             }
             int pageSize = 3;
@@ -111,7 +111,7 @@ namespace PartTimeJob.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EmployerID,Name,Title,Position,Location,Salary,Description,AgeRange,ContactNumber,GenderType,EmployeementType,Qualification,NumberOfEmp,District,JobRole,Education,Requirement,Status")] Job job)
+        public ActionResult Create([Bind(Include = "EmployerID,Catagory,Title,Position,Location,Salary,Description,AgeRange,ContactNumber,GenderType,EmployeementType,Qualification,NumberOfEmp,District,JobRole,Education,Requirement,Status")] Job job)
         {
             try
             {

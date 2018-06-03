@@ -28,9 +28,11 @@ namespace PartTimeJob.Models
         public Gender? Gender { get; set; }
 
         public string Position { get; set; }
+
         public string Country { get; set; }
 
-        //public virtual User User { get; set; }
+
         public virtual ICollection<Job> Jobs { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
     }
 }

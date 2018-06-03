@@ -19,10 +19,11 @@ namespace PartTimeJob.DAL
         public DbSet<Employer> Employers { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobApply> JobApplies { get; set; }
-        //public DbSet<Login> Logins { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<PostApproval> PostApprovals { get; set; }
         public DbSet<PostView> PostViews { get; set; }
-        //public DbSet<User> Users { get; set; }
+        public DbSet<YourTrip> YourTrips { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

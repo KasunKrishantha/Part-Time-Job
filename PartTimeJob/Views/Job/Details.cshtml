@@ -19,11 +19,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Catagory)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Catagory)
         </dd>
 
         <dt>
@@ -147,6 +147,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>
 
@@ -155,20 +163,20 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model=> model.JobApplies)
+            @Html.DisplayNameFor(model => model.JobApplies)
         </dt>
         <dd>
             <table class="table">
                 <tr>
-                    <th>Employee Name</th> 
+                    <th>Employee Name</th>
                     <th>Enrollment Date</th>
                 </tr>
                 @foreach (var item in Model.JobApplies)
                 {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Employee.FirstName)</td>
-                    <td>@Html.DisplayFor(modelItem=> item.ApplyDate)</td>
-                </tr>
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Employee.FirstName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ApplyDate)</td>
+                    </tr>
 
                 }
             </table>

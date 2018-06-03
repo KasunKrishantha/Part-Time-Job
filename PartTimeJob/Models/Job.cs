@@ -31,7 +31,7 @@ namespace PartTimeJob.Models
         [ForeignKey("Employer")]
         public int EmployerID { get; set; }
 
-        public string Name { get; set; }
+        public string Catagory { get; set; }
         public string Title { get; set; }
         public string Position { get; set; }
         public string Location { get; set; }
@@ -47,15 +47,16 @@ namespace PartTimeJob.Models
         public string JobRole { get; set; }
         public string Education { get; set; }
         public string Requirement { get; set; }
-        //public DateTime Date { get; set; }
+        public DateTime Date { get; set; }
         public Status? Status { get; set; }
 
-        //public virtual ICollection<PostView> PostViews { get; set; }
+        public virtual ICollection<PostView> PostViews { get; set; }
         public virtual ICollection<PostApproval> PostApprovals { get; set; }
         public virtual ICollection<JobApply> JobApplies{ get; set; }
+        //public virtual ICollection<Payment> Payments { get; set; }
+        public virtual ICollection<YourTrip> YourTrips { get; set; }
         public virtual Employer Employer { get; set; }
 
-        //public virtual ICollection<Post> Posts { get; set; }
 
 
     }

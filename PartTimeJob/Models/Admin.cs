@@ -36,7 +36,7 @@ namespace PartTimeJob.Models
 
         public Grade? Grade { get; set; }
 
-        //public virtual User User { get; set; }
+
         public virtual ICollection<PostApproval> PostApprovals { get; set; }
 
     }
